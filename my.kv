@@ -1,20 +1,51 @@
-<MyGridLayout>
+<ScreenManagement>:
+    SigninPage:
+    GuestScreen:
 
-    name:name
-
+<SigninPage>:
+    name: 'sign'
     GridLayout:
         cols:1
-        size: root.width, root.height
+        size: (root.width, root.height)
+        padding: 10
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: 1, 1, .878,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
 
         Label:
             text: "Enter the Trail Code"
+            font_size: '20sp'
+            bold: True
+            color: 0, 0, 0, 1
         TextInput:
             multiline:False
             id: name
-            
-
+            size_hint_y: None
+            height: '40sp'
+            font_size: '16sp'
+            padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
         Button:
             text: "Continue as Guest"
-            font_size: 32
-            on_press: root.press()
+            font_size: 36
+            background_color: 0,0,0,0
+            canvas.before:
+                Color:
+                    rgba: 34/255.0, 139/255.0, 34/255.0, 1 # RGB color for forest green color.
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [18,]
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: '50sp'
+            on_press: app.root.current = 'guest'
+
+<GuestScreen>
+    name: 'guest'
+    orientation: 'vertical'
+
