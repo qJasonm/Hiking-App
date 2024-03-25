@@ -1,0 +1,49 @@
+ScreenManager:
+    id: screen_manager
+    ConnectScreen:
+        id: connect_screen
+        name: 'connect_screen'
+        manager: screen_manager
+    ChatScreen:
+        id: chat_screen
+        name: 'chat_screen'
+        manager: screen_manager
+
+<ConnectScreen>:
+    username_input: username_input
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '20sp'
+        spacing: '20sp'
+        Label:
+            size_hint_y: None
+            height: '40sp'
+            text: 'Enter your username:'
+        TextInput:
+            id: username_input
+            multiline: False
+        Button:
+            size_hint_y: None
+            height: '40sp'
+            text: 'Connect'
+            on_release: root.connect()
+
+<ChatScreen>:
+    chat_log: chat_log
+    chat_input: chat_input
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '10sp'
+        spacing: '5sp'
+        TextInput:
+            id: chat_log
+            readonly: True
+        BoxLayout:
+            size_hint_y: None
+            height: '40sp'
+            TextInput:
+                id: chat_input
+                multiline: False
+            Button:
+                text: 'Send'
+                on_release: root.send_message()
