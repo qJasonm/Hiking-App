@@ -41,6 +41,20 @@ ScreenManager:
         orientation: 'vertical'
         padding: '10sp'
         spacing: '5sp'
+        Button:
+            text: 'Disconnect'
+            on_release: root.disconnect()
+            size_hint_y: None
+            height: '40sp'
+            background_color: 1, 0, 0, 1  # Red color for the button
+            color: 1, 1, 1, 1  # White color for the button text
+            canvas.before:
+                Color:
+                    rgba: self.background_color
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15,]
         TextInput:
             id: chat_log
             readonly: True
@@ -58,11 +72,15 @@ ScreenManager:
                 hint_text_color: 0.31, 0.51, 0.28, 1  # Dark green hint text color
             Button:
                 text: 'Send'
-                on_release: root.send_message()
-                background_color: 0.6, 0.8, 0.4, 1  # Light green background color for the button
-                background_normal: ''  # Remove the button's default background
-            Button:
-                text: 'Disconnect'
-                on_release: root.disconnect()
-                background_color: 0.6, 0.8, 0.4, 1  # Light green background color for the button
-                background_normal: ''  # Remove the button's default background
+                on_release: 
+                    root.send_message()
+                    chat_input.text = ''
+                background_color: 0, 0, 1, 1  # Blue color for the button
+                color: 1, 1, 1, 1  # White color for the button text
+                canvas.before:
+                    Color:
+                        rgba: self.background_color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15,]
