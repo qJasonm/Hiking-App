@@ -31,6 +31,12 @@ ScreenManager:
 <ChatScreen>:
     chat_log: chat_log
     chat_input: chat_input
+    canvas.before:
+        Color:
+            rgba: 0.31, 0.51, 0.28, 1  # Dark green color for the background
+        Rectangle:
+            pos: self.pos
+            size: self.size
     BoxLayout:
         orientation: 'vertical'
         padding: '10sp'
@@ -38,12 +44,25 @@ ScreenManager:
         TextInput:
             id: chat_log
             readonly: True
+            background_color: 0, 0, 0, 0  # Make the background of the chat log transparent
+            hint_text: "Chat log..."  # Provide a hint text for the chat log
+            hint_text_color: 0.6, 0.8, 0.4, 1  # Light green hint text color
         BoxLayout:
             size_hint_y: None
             height: '40sp'
             TextInput:
                 id: chat_input
                 multiline: False
+                background_color: 0.6, 0.8, 0.4, 1  # Light green background color for the chat input
+                hint_text: "Type your message..."  # Provide a hint text for the chat input
+                hint_text_color: 0.31, 0.51, 0.28, 1  # Dark green hint text color
             Button:
                 text: 'Send'
                 on_release: root.send_message()
+                background_color: 0.6, 0.8, 0.4, 1  # Light green background color for the button
+                background_normal: ''  # Remove the button's default background
+            Button:
+                text: 'Disconnect'
+                on_release: root.disconnect()
+                background_color: 0.6, 0.8, 0.4, 1  # Light green background color for the button
+                background_normal: ''  # Remove the button's default background
