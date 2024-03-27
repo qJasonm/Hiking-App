@@ -6,7 +6,7 @@ import threading
 from kivy.properties import ObjectProperty
 from kivy.clock import mainthread
 
-HOST = '192.168.0.111'
+HOST = '127.0.0.1'
 PORT = 1234
 
 
@@ -27,6 +27,7 @@ class ChatScreen(Screen):
         self.username = username
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((HOST, PORT))
+        self.client.sendall(username.encode())  # send username to server
         threading.Thread(target=self.listen_for_messages_from_server, daemon=True).start()
 
     def listen_for_messages_from_server(self):
@@ -40,6 +41,12 @@ class ChatScreen(Screen):
                 message = "Message received from client is empty"
             self.update_chat_log(message)
             print(self.chat_log)
+    
+    def disconnect(self):
+        if self.client:
+            self.client.close()
+            self.manager.current = 'connect_screen'
+            self.chat_log.text = ''
 
     @mainthread
     def update_chat_log(self, message):
