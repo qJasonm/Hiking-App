@@ -9,18 +9,25 @@ active_clients = [] # List of all currently connected users
 
 # Function to listen for upcoming messages from a client
 def listen_for_messages(client, username):
+    while True:
+        try:
+            message = client.recv(2048).decode('utf-8')
+            if len(message) > 0:
+                final_msg = username + '~' + message
+                send_messages_to_all(final_msg)
+            else:
+                raise ConnectionResetError
+        except ConnectionResetError:
+            print(f"Client {username} has disconnected")
+            remove_client(username)
+            return
 
-    while 1:
-
-        message = client.recv(2048).decode('utf-8')
-        if message != '':
-            
-            final_msg = username + '~' + message
-            send_messages_to_all(final_msg)
-
-        else:
-            print(f"The message send from client {username} is empty")
-
+def remove_client(username):
+    for i, active_client in enumerate(active_clients):
+        if active_client[0] == username:
+            del active_clients[i]
+            send_messages_to_all(f"SERVER~{username} left the chat")
+            break
 
 # Function to send message to a single client
 def send_message_to_client(client, message):
