@@ -3,7 +3,7 @@
     SigninPage:
     GuestScreen:
     KnowledgeScreen:
-    MapWidget:
+    # MapWidget:
 
 <SigninPage>:
     name: 'sign'
@@ -23,7 +23,7 @@
             text: "Enter the Trail Code"
             font_size: '20sp'
             bold: True
-            color: 0, 0, 0, 1
+            color: "#ffffff"
         TextInput:
             id: trail_code_input
             multiline:False
@@ -38,7 +38,7 @@
             background_color: 0,0,0,0
             canvas.before:
                 Color:
-                    rgba: 34/255.0, 139/255.0, 34/255.0, 1 # RGB color for forest green color.
+                    rgba: 34/255.0, 139/255.0, 34/255.0, 1 
                 RoundedRectangle:
                     pos: self.pos
                     size: self.size
@@ -70,41 +70,59 @@
             spacing: 30
 
             TextInput:
-                text: 'Weather'
-                background_color: 1, 0, 0, 1
-                halign: 'center'
-                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-            TextInput:
+                id: alert
                 text: 'Alert'
-                background_color: 0, 1, 0, 1
+                background_color: "#ac4e48"
                 halign: 'center'
                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                spacing: 10
             TextInput:
+                id: more_info
                 text: 'More Info'
-                background_color: 0, 0, 1, 1
+                background_color: '#8ca2ed'
                 halign: 'center'
                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                spacing: 10
             TextInput:
+                id: weather
+                text: 'Weather'
+                background_color: "#7effff"
+                halign: 'center'
+                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                spacing: 10
+            TextInput:
+                id: warning
                 text: 'Warning'
                 background_color: 1, 1, 0, 1
                 halign: 'center'
                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                spacing: 10
         
-        Button:
-            text: 'Connect with someone else'
-            size_hint_y: None
-            height: '50dp'
-            background_color: 0, 1, 0, 1
-            color: 1, 1, 1, 1  # Text color is white
-            font_size: '20sp'
-        
-        MapWidget:
-            size_hint: 1, 1
+        BoxLayout:
+            orientation: 'vertical'
 
-<MapWidget>:
-    canvas:
-        Color:
-            rgba: 0.3, 0.3, 0.3, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
+            Button:
+                text: 'Connect with someone else'
+                size_hint_y: None
+                height: '50dp'
+                background_color: 0, 1, 0, 1
+                color: 1, 1, 1, 1  
+                font_size: '20sp'
+
+            Image:
+                id: map_image
+                source: None
+                size_hint: (1, None)
+                height: root.height * 0.2  # Set the height to 80% of the BoxLayout's height
+                allow_stretch: True
+        
+#         MapWidget:
+#             size_hint: 1, 1
+
+# <MapWidget>:
+#     canvas:
+#         Color:
+#             rgba: 0.3, 0.3, 0.3, 1
+#         Rectangle:
+#             pos: self.pos
+#             size: self.size
