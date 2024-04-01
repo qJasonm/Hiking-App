@@ -107,6 +107,7 @@ class ScreenManagement(ScreenManager):
 
 class TrailApp(App):
     def build(self):
+        self.icon = 'bear.jpg'
         return ScreenManagement()
 
 if __name__ == '__main__':
