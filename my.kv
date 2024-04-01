@@ -1,10 +1,24 @@
 #:kivy 2.3.0
 <ScreenManagement>:
+    id: screen_manager
     SigninPage:
+        id: sign_in
+        name: 'sign_in'
     GuestScreen:
     KnowledgeScreen:
+        id: knowledge
+        name: 'knowledge'
+        manager: screen_manager
     GeneralScreen:
     # MapWidget:
+    ConnectScreen:
+        id: connect_screen
+        name: 'connect_screen'
+        manager: screen_manager
+    ChatScreen:
+        id: chat_screen
+        name: 'chat_screen'
+        manager: screen_manager
 
 <SigninPage>:
     name: 'sign'
@@ -126,6 +140,7 @@
                 background_color: 0, 1, 0, 1
                 color: 1, 1, 1, 1  
                 font_size: '20sp'
+                on_release: root.connect()
 
             Image:
                 id: map_image
@@ -150,6 +165,16 @@
     orientation: 'vertical'
     spacing: 10
     padding: 10
+
+    AnchorLayout:  # Added anchor layout
+        anchor_x: 'left'
+        anchor_y: 'top'
+        Button:
+            text: 'Exit'
+            background_color: 1, 1, 1, 1  # white color
+            color: 1, 0, 0, 1  # red color
+            size_hint: 0.1, 0.1
+            on_release: root.exit()
 
     BoxLayout:
         orientation: 'vertical'
@@ -189,3 +214,80 @@
                 halign: 'center'
                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                 spacing: 10
+
+
+<ConnectScreen>:
+    username_input: username_input
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '20sp'
+        spacing: '20sp'
+        Label:
+            size_hint_y: None
+            height: '40sp'
+            text: 'Enter your username:'
+        TextInput:
+            id: username_input
+            multiline: False
+        Button:
+            size_hint_y: None
+            height: '40sp'
+            text: 'Connect'
+            on_release: root.connect()
+
+<ChatScreen>:
+    chat_log: chat_log
+    chat_input: chat_input
+    canvas.before:
+        Color:
+            rgba: 0.31, 0.51, 0.28, 1  # Dark green color for the background
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '10sp'
+        spacing: '5sp'
+        Button:
+            text: 'Disconnect'
+            on_release: root.disconnect()
+            size_hint_y: None
+            height: '40sp'
+            background_color: 1, 0, 0, 1  # Red color for the button
+            color: 1, 1, 1, 1  # White color for the button text
+            canvas.before:
+                Color:
+                    rgba: self.background_color
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15,]
+        TextInput:
+            id: chat_log
+            readonly: True
+            background_color: 0, 0, 0, 0  # Make the background of the chat log transparent
+            hint_text: "Chat log..."  # Provide a hint text for the chat log
+            hint_text_color: 0.6, 0.8, 0.4, 1  # Light green hint text color
+        BoxLayout:
+            size_hint_y: None
+            height: '40sp'
+            TextInput:
+                id: chat_input
+                multiline: False
+                background_color: 0.6, 0.8, 0.4, 1  # Light green background color for the chat input
+                hint_text: "Type your message..."  # Provide a hint text for the chat input
+                hint_text_color: 0.31, 0.51, 0.28, 1  # Dark green hint text color
+            Button:
+                text: 'Send'
+                on_release: 
+                    root.send_message()
+                    chat_input.text = ''
+                background_color: 0, 0, 1, 1  # Blue color for the button
+                color: 1, 1, 1, 1  # White color for the button text
+                canvas.before:
+                    Color:
+                        rgba: self.background_color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15,]
