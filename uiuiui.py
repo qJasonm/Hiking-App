@@ -6,7 +6,13 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from weather import Weather
+from kivy.clock import mainthread
+from kivy.config import Config
+import socket
+import threading
 
+HOST = '127.0.0.1'
+PORT = 8080
 Builder.load_file('my.kv')
 
 class SigninPage(Screen):
@@ -38,8 +44,78 @@ class KnowledgeScreen(Screen):
             self.ids.warning.text = "Warning: " + "Beware of Bears"
             self.ids.map_image.source = "cherry-creek.png"
 
+    def connect(self):
+        self.manager.current = 'connect_screen'
+        # self.manager.get_screen('connect_screen').connect
+
 class GeneralScreen(Screen):
+    def exit(self):
+        self.manager.current = 'sign_in'
     pass
+
+class ConnectScreen(Screen):
+    username_input = ObjectProperty(None)
+
+    def connect(self):
+        self.manager.current = 'chat_screen'
+        username = self.username_input.text
+        self.manager.get_screen('chat_screen').connect(username)
+
+
+class ChatScreen(Screen):
+    chat_log = ObjectProperty(None)
+    chat_input = ObjectProperty(None)
+
+    def connect(self, username=''):
+        self.username = username
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect((HOST, PORT))
+        self.client.sendall(username.encode())  # send username to server
+        threading.Thread(target=self.listen_for_messages_from_server, daemon=True).start()
+
+    def listen_for_messages_from_server(self):
+        while True:
+            message = self.client.recv(2048).decode('utf-8')
+            if message != '':
+                username = message.split("~")[0]
+                content = message.split('~')[1]
+                message = f"[{username}] {content}"
+            else:
+                message = "Message received from client is empty"
+            self.update_chat_log(message)
+            
+    
+    def disconnect(self):
+        if self.client:
+            self.client.close()
+            self.manager.current = 'connect_screen'
+            self.chat_log.text = ''
+
+    @mainthread
+    def update_chat_log(self, message):
+        self.chat_log.text += message + '\n'
+
+    def send_message(self):
+        message = self.chat_input.text
+        if message != '':
+            self.client.sendall(message.encode())
+        else:
+            self.chat_log.text += "Message cannot be empty\n"
+        
+class ScreenManagement(ScreenManager):
+    pass
+
+class TrailApp(App):
+    def build(self):
+        return ScreenManagement()
+
+if __name__ == '__main__':
+    TrailApp().run()
+
+
+
+
+
 # class MapWidget(Screen):
 #     def __init__(self, **kwargs):
 #         super(MapWidget, self).__init__(**kwargs)
@@ -56,14 +132,3 @@ class GeneralScreen(Screen):
 #     def update(self, *args):
 #         self.rect.pos = self.pos
 #         self.rect.size = self.size
-        
-class ScreenManagement(ScreenManager):
-    pass
-
-class TrailApp(App):
-    def build(self):
-        return ScreenManagement()
-
-if __name__ == '__main__':
-    TrailApp().run()
-
