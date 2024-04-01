@@ -14,6 +14,10 @@ class SigninPage(Screen):
         self.manager.current = 'knowledge'
         self.manager.get_screen('knowledge').update_data(trail_code)
 
+    def go_to_general(self):
+        self.manager.current = 'general'
+        self.manager.get_screen('general')
+
 class GuestScreen(Screen):
     def print_passcode(self, passcode):
         print(f'Entered passcode is: {passcode}')
@@ -34,6 +38,8 @@ class KnowledgeScreen(Screen):
             self.ids.warning.text = "Warning: " + "Beware of Bears"
             self.ids.map_image.source = "cherry-creek.png"
 
+class GeneralScreen(Screen):
+    pass
 # class MapWidget(Screen):
 #     def __init__(self, **kwargs):
 #         super(MapWidget, self).__init__(**kwargs)
