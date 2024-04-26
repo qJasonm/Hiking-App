@@ -2,15 +2,18 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.graphics import Rectangle, Color
 from kivy.uix.label import Label
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, BooleanProperty
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from weather import Weather
 from kivy.clock import mainthread
 from kivy.config import Config
+from kivymd.app import MDApp
+from kivy.core.window import Window
+from kivy_garden.mapview import MapView
 import socket
 import threading
-
+import requests
+Window.size = (350,600)
 HOST = '127.0.0.1'
 PORT = 8080
 Builder.load_file('my.kv')
@@ -28,26 +31,68 @@ class GuestScreen(Screen):
     def print_passcode(self, passcode):
         print(f'Entered passcode is: {passcode}')
 
+class Weather:
+    def get_weather(self, trail_name: str):
+        if trail_name.lower() == "lairo'thebear":
+            weather_info_url = "https://bear.qjasonma.com/Lairo'thebear/json"
+        elif trail_name.lower() == 'cherry creek':
+            weather_info_url = "https://bear.qjasonma.com/CherryCreek/json"
+        elif trail_name.lower() == 'sloan lake':
+            weather_info_url = "https://bear.qjasonma.com/Sloanslake/json"
+        weather_info = (requests.get(weather_info_url)).json()
+
+        weather_condition = weather_info['weather']
+        weather_temp = weather_info['temperature']
+        weather_visibility = weather_info['visibility']
+        weather_windspeed = weather_info['wind_speed']
+        city = weather_info['city']
+        prediction = weather_info['prediction']['advice']
+        
+        return (weather_condition, weather_temp, weather_visibility, weather_windspeed, city, prediction)
+
 class KnowledgeScreen(Screen):
-    def __init__(self, **kwargs):
-        super(KnowledgeScreen, self).__init__(**kwargs)
-        self.trail_code = '' 
-
+    map_lat = ObjectProperty('39.7392')  
+    map_lon = ObjectProperty('-104.9903')  
+    map_zoom = ObjectProperty('10')  
+    show_map = BooleanProperty(False)
     def update_data(self, trail_code_input):
-        self.ids.trail_code_display.text = 'Trail Code: ' + trail_code_input
+        self.ids.location.text = str(trail_code_input).upper()
         weather = Weather()
-        if trail_code_input == '123':
-            weather_condition, weather_temp = weather.get_weather("denver")
-            self.ids.weather.text = str(weather_temp) + "  oF" + "\n" + weather_condition
-            self.ids.alert.text = "Alert: " + "Strong winds"
-            self.ids.more_info.text = "More Info: " + "Nice trail ahead !"
-            self.ids.warning.text = "Warning: " + "Beware of Bears"
-            self.ids.map_image.source = "cherry-creek.png"
+        weather_condition, weather_temp, weather_visibility, weather_windspeed, city, prediction = weather.get_weather(trail_code_input)
+        
+        # Update weather labels with fetched information
+        self.ids.weather_condition.text = f"{weather_condition}"
+        self.ids.temperature.text = f"{weather_temp}°F"
+        self.ids.visibility.text = f"{weather_visibility}"
+        self.ids.wind.text = f"{weather_windspeed} mph"
+        self.ids.city.text = city
+        self.ids.prediction.text = prediction
 
+        if weather_condition == 'Clear':
+            self.ids.sum_image.source = 'sunny.png'
+        elif weather_condition == 'Rain':
+            self.ids.sum_image.source = 'rainy.png'
+        elif weather_condition == 'Clouds':
+            self.ids.sum_image.source = 'clouds.png'
+        elif weather_condition == 'Snow':
+            self.ids.sum_image.source = 'snow.png'
+
+        if trail_code_input.lower() == "lairo'thebear":
+            self.ids.mapview.lat = '39.66825309799876'  
+            self.ids.mapview.lon = '-105.25672674719111'
+        elif trail_code_input.lower() == 'cherry creek':
+            self.ids.mapview.lat = '39.69145184179065' 
+            self.ids.mapview.lon = '-104.9144065293836' 
+        elif trail_code_input.lower() == 'sloan lake':
+            self.ids.mapview.lat = '39.74487181981862'  
+            self.ids.mapview.lon = '-105.0447771796079' 
     def connect(self):
         self.manager.current = 'connect_screen'
-        # self.manager.get_screen('connect_screen').connect
 
+    def exit(self):
+        self.manager.current = 'sign_in'
+    def toggle_map(self):
+        self.show_map = not self.show_map
 class GeneralScreen(Screen):
     def exit(self):
         self.manager.current = 'sign_in'
@@ -60,7 +105,8 @@ class ConnectScreen(Screen):
         self.manager.current = 'chat_screen'
         username = self.username_input.text
         self.manager.get_screen('chat_screen').connect(username)
-
+    def exit(self):
+        self.manager.current = 'sign_in'
 
 class ChatScreen(Screen):
     chat_log = ObjectProperty(None)
@@ -72,6 +118,9 @@ class ChatScreen(Screen):
         self.client.connect((HOST, PORT))
         self.client.sendall(username.encode())  # send username to server
         threading.Thread(target=self.listen_for_messages_from_server, daemon=True).start()
+
+    def exit(self):
+        self.manager.current = 'sign_in'
 
     def listen_for_messages_from_server(self):
         while True:
@@ -112,24 +161,3 @@ class TrailApp(App):
 
 if __name__ == '__main__':
     TrailApp().run()
-
-
-
-
-
-# class MapWidget(Screen):
-#     def __init__(self, **kwargs):
-#         super(MapWidget, self).__init__(**kwargs)
-#         self.size_hint = (1, 1)
-#         self.bind(size=self.update)
-        
-#         # Example map data
-#         self.add_widget(Label(text="Map Data: Latitude = 40.7128, Longitude = -74.0060", color=(0, 0, 0, 1)))
-
-#         with self.canvas:
-#             Color(1, 1, 1, 1)  # White background
-#             self.rect = Rectangle(pos=self.pos, size=self.size)
-    
-#     def update(self, *args):
-#         self.rect.pos = self.pos
-#         self.rect.size = self.size
