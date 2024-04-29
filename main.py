@@ -14,9 +14,11 @@ import socket
 import threading
 import requests
 Window.size = (350,600)
-HOST = '127.0.0.1'
-PORT = 8080
+HOST = '35.197.2.183'
+PORT = 3030
 Builder.load_file('my.kv')
+
+map_dict = {'1111':"lair o'the bear",'2222':'cherry creek','3333':"sloan's lake"}
 
 class SigninPage(Screen):
     def go_to_knowledge(self, trail_code):
@@ -33,11 +35,11 @@ class GuestScreen(Screen):
 
 class Weather:
     def get_weather(self, trail_name: str):
-        if trail_name.lower() == "lairo'thebear":
+        if trail_name.lower() == "1111":
             weather_info_url = "https://bear.qjasonma.com/Lairo'thebear/json"
-        elif trail_name.lower() == 'cherry creek':
+        elif trail_name.lower() == '2222':
             weather_info_url = "https://bear.qjasonma.com/CherryCreek/json"
-        elif trail_name.lower() == 'sloan lake':
+        elif trail_name.lower() == '3333':
             weather_info_url = "https://bear.qjasonma.com/Sloanslake/json"
         weather_info = (requests.get(weather_info_url)).json()
 
@@ -56,15 +58,14 @@ class KnowledgeScreen(Screen):
     map_zoom = ObjectProperty('10')  
     show_map = BooleanProperty(False)
     def update_data(self, trail_code_input):
-        self.ids.location.text = str(trail_code_input).upper()
+        self.ids.location.text = str(map_dict[trail_code_input]).upper()
         weather = Weather()
         weather_condition, weather_temp, weather_visibility, weather_windspeed, city, prediction = weather.get_weather(trail_code_input)
-        
         # Update weather labels with fetched information
         self.ids.weather_condition.text = f"{weather_condition}"
         self.ids.temperature.text = f"{weather_temp}°F"
         self.ids.visibility.text = f"{weather_visibility}"
-        self.ids.wind.text = f"{weather_windspeed} mph"
+        self.ids.wind.text = f"{weather_windspeed} m/s"
         self.ids.city.text = city
         self.ids.prediction.text = prediction
 
