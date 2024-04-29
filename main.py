@@ -13,7 +13,9 @@ from kivy_garden.mapview import MapView
 import socket
 import threading
 import requests
-Window.size = (350,600)
+from kivy.config import Config
+Config.set('graphics', 'fullscreen', 1)
+# Window.size = (350,600)
 HOST = '35.197.2.183'
 PORT = 3030
 Builder.load_file('my.kv')
