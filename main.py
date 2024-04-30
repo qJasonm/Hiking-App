@@ -18,7 +18,7 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 Config.set('graphics', 'fullscreen', 1)
 # Window.size = (350,600)
-HOST = '35.197.2.183'
+HOST = ''
 PORT = 3030
 Builder.load_file('my.kv')
 
