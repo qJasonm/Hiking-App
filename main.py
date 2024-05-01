@@ -18,7 +18,7 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 Config.set('graphics', 'fullscreen', 1)
 # Window.size = (350,600)
-HOST = ''
+HOST = '35.197.2.183'
 PORT = 3030
 Builder.load_file('my.kv')
 
@@ -29,9 +29,9 @@ class SigninPage(Screen):
         self.manager.current = 'knowledge'
         self.manager.get_screen('knowledge').update_data(trail_code)
 
-    def go_to_general(self):
-        self.manager.current = 'general'
-        self.manager.get_screen('general')
+    # def go_to_general(self):
+    #     self.manager.current = 'general'
+    #     self.manager.get_screen('general')
 
 class GuestScreen(Screen):
     def print_passcode(self, passcode):
@@ -45,6 +45,7 @@ class Weather:
             weather_info_url = "https://bear.qjasonma.com/CherryCreek/json"
         elif trail_name.lower() == '3333':
             weather_info_url = "https://bear.qjasonma.com/Sloanslake/json"
+            
         weather_info = (requests.get(weather_info_url)).json()
 
         weather_condition = weather_info['weather']
