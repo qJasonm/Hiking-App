@@ -56,21 +56,25 @@ https://www.youtube.com/watch?v=M22luAuJR44&list=PLRMY6kqsGZOk6Vr6Zga7B4QmBJNVHg
 ```
 
 <br>
+
 ```
 !sudo apt install software-properties-common
 ```
 
 <br>
+
 ```
 !sudo add-apt-repository ppa:linuxuprising/java -y
 ```
 
 <br>
+
 ```
 !sudo apt update
 ```
 
 <br>
+
 ```
 !sudo apt install oracle-java17-installer
 ```
