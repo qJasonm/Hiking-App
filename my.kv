@@ -286,18 +286,33 @@
         orientation: 'vertical'
         padding: '20sp'
         spacing: '20sp'
+        
+        # Giving the window a sky-blue background
+        canvas.before:
+            Color:
+                rgb: (0.53, 0.81, 0.92, 1) # this is an RGB representation of sky blue
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
         Label:
-            size_hint_y: None
+            size_hint_y: 10
             height: '40sp'
             text: 'Enter your username:'
         TextInput:
             id: username_input
             multiline: False
+            size_hint_y: None  # Allow manual control of the vertical size
+            height: 90  # Smaller height for the TextInput
+            
         Button:
             size_hint_y: None
             height: '40sp'
             text: 'Connect'
             on_release: root.connect()
+
+            # Giving button a sky-blue background
+            background_color: (0.53, 0.81, 0.92, 1)
 
 <ChatScreen>:
     chat_log: chat_log
@@ -312,6 +327,31 @@
         orientation: 'vertical'
         padding: '10sp'
         spacing: '5sp'
+        BoxLayout:
+            size_hint_y: None
+            height: '40sp'
+            TextInput:
+                id: chat_input
+                multiline: False
+                size_hint_x: 0.8  # Adjust the size of the input box
+                background_color: 0.6, 0.8, 0.4, 1  # Light green background color for the chat input
+                hint_text: "Type your message..."  # Provide a hint text for the chat input
+                hint_text_color: 0.31, 0.51, 0.28, 1  # Dark green hint text color
+            Button:
+                text: 'Send'
+                size_hint_x: 0.2  # Adjust the size of the send button
+                on_release: 
+                    root.send_message()
+                    chat_input.text = ''
+                background_color: 0, 0, 1, 1  # Blue color for the button
+                color: 1, 1, 1, 1  # White color for the button text
+                canvas.before:
+                    Color:
+                        rgba: self.background_color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15,]
         Button:
             text: 'Disconnect'
             on_release: root.disconnect()
@@ -332,26 +372,3 @@
             background_color: 0, 0, 0, 0  # Make the background of the chat log transparent
             hint_text: "Chat log..."  # Provide a hint text for the chat log
             hint_text_color: 0.6, 0.8, 0.4, 1  # Light green hint text color
-        BoxLayout:
-            size_hint_y: None
-            height: '40sp'
-            TextInput:
-                id: chat_input
-                multiline: False
-                background_color: 0.6, 0.8, 0.4, 1  # Light green background color for the chat input
-                hint_text: "Type your message..."  # Provide a hint text for the chat input
-                hint_text_color: 0.31, 0.51, 0.28, 1  # Dark green hint text color
-            Button:
-                text: 'Send'
-                on_release: 
-                    root.send_message()
-                    chat_input.text = ''
-                background_color: 0, 0, 1, 1  # Blue color for the button
-                color: 1, 1, 1, 1  # White color for the button text
-                canvas.before:
-                    Color:
-                        rgba: self.background_color
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [15,]
