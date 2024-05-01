@@ -1,6 +1,6 @@
 Kivy
 requests
 sockets
-kivy_garden.graph --extra-index-url https://kivy-garden.github.io/simple/
+kivy_garden.graph
 kivy-garden.mapview
 kivymd
