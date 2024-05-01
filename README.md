@@ -33,6 +33,7 @@ https://www.youtube.com/watch?v=M22luAuJR44&list=PLRMY6kqsGZOk6Vr6Zga7B4QmBJNVHg
 ```
 
 <br>
+
 ```
 !sudo apt-get install build-essential libsqlite3-dev sqlite3 bzip2 libbz2-dev zlib1g-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev libreadline-dev libncursesw5-dev libffi-dev uuid-dev libffi6
 ```
