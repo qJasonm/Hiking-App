@@ -1,3 +1,5 @@
+[Link text]([https://website-name.com](https://www.youtube.com/watch?v=M22luAuJR44&list=PLRMY6kqsGZOk6Vr6Zga7B4QmBJNVHgiM9&index=73&ab_channel=HaggaiOdanga))
+
 ```!pip install buildozer ```
 <br>
 ```!pip3 install --user --upgrade Cython==0.29.33 virtualenv```
@@ -43,4 +45,28 @@
 !buildozer init
 ```
 
+<br>
+```
+!sudo apt-get install libtool
+```
+
+<br>
+```
+!sudo apt install software-properties-common
+```
+
+<br>
+```
+!sudo add-apt-repository ppa:linuxuprising/java -y
+```
+
+<br>
+```
+!sudo apt update
+```
+
+<br>
+```
+!sudo apt install oracle-java17-installer
+```
 
