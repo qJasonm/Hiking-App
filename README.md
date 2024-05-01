@@ -1,4 +1,4 @@
-[Link text]([https://website-name.com](https://www.youtube.com/watch?v=M22luAuJR44&list=PLRMY6kqsGZOk6Vr6Zga7B4QmBJNVHgiM9&index=73&ab_channel=HaggaiOdanga))
+https://www.youtube.com/watch?v=M22luAuJR44&list=PLRMY6kqsGZOk6Vr6Zga7B4QmBJNVHgiM9&index=73&ab_channel=HaggaiOdanga
 
 ```!pip install buildozer ```
 <br>
