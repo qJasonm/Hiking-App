@@ -61,16 +61,6 @@
             border_radius: [18, ]
             on_press: root.go_to_knowledge(trail_code_input.text)
 
-        Button:
-            text: "Continue as Guest"
-            font_size: '20sp'
-            background_color: 0.2, 0.6, 0.4, 1  # Green background color
-            background_normal: ''
-            size_hint_y: None
-            height: dp(50)
-            border_radius: [18, ]
-            on_press: root.go_to_general()
-
 
 <GuestScreen>
     name: 'guest'
@@ -251,37 +241,13 @@
 
 <ConnectScreen>:
     username_input: username_input
-    BoxLayout:
-        orientation: 'vertical'
-        padding: dp(20)
-        spacing: dp(20)
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'top'
         Button:
             text: 'Exit'
-            background_color: 1, 1, 1, 1  # white color
-            color: 1, 0, 0, 1  # red color
             size_hint: 0.1, 0.1
             on_release: root.exit()
-        Label:
-            size_hint_y: None
-            height: '40sp'
-            text: 'Enter your username:'
-        TextInput:
-            id: username_input
-            multiline: False
-            background_color: "#FFFFFF"  # White background color for input
-            foreground_color: "#000000"  # Black text color
-        Button:
-            font_size: '20sp'
-            background_color: 0.2, 0.6, 0.4, 1  # Green background color
-            background_normal: ''
-            size_hint_y: None
-            height: dp(50)
-            border_radius: [18, ]
-            text: 'Connect'
-            on_release: root.connect()
-
-<ConnectScreen>:
-    username_input: username_input
     BoxLayout:
         orientation: 'vertical'
         padding: '20sp'
